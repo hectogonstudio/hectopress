@@ -1,0 +1,82 @@
+{
+  "name": "hectogon/wordpress-installer",
+  "description": "Installs Wordpress and Plugins via Composer",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Hectogon",
+      "email": "hectogonstudio@gmail.com",
+      "homepage": "https://hectogon.studio"
+    }
+  ],
+  "type": "project",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org"
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "advanced-custom-fields/advanced-custom-fields-pro",
+        "version": "5.7.13",
+        "type": "wordpress-plugin",
+        "dist": {
+          "type": "zip",
+          "url": "https://connect.advancedcustomfields.com/index.php?a=download&p=pro&k={%PLUGIN_ACF_KEY}&t={%version}"
+        },
+        "require": {
+          "composer/installers": "^1.4",
+          "ffraenz/private-composer-installer": "^2.0"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "gravityforms/gravityforms",
+        "version": "2.4.9.5",
+        "type": "wordpress-plugin",
+        "dist": {
+          "type": "zip",
+          "url": "http://www.gravityhelp.com/wp-content/plugins/gravitymanager/api.php?op=get_plugin&slug=gravityforms&key={%PLUGIN_GRAVITY}"
+        },
+        "require": {
+          "composer/installers": "^1.4",
+          "gotoandplay/gravityforms-composer-installer": "^1.0"
+        }
+      }
+    }
+  ],
+  "config": {
+    "vendor-dir": "vendor",
+    "secure-http": false
+  },
+  "require": {
+    "johnpbloch/wordpress": ">=5.0",
+    "wpackagist-plugin/classic-editor":"*",
+    "advanced-custom-fields/advanced-custom-fields-pro": "*",
+    "gravityforms/gravityforms": "*"
+  },
+  "extra": {
+    "wordpress-install-dir": "build",
+    "wordpress-content-dir": "build/wp-content",
+    "installer-paths": {
+      "build/wp-content/plugins/{$name}/": [
+        "type:wordpress-plugin"
+      ],
+      "build/wp-content/themes/{$name}/": [
+        "type:wordpress-theme"
+      ]
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "composer require advanced-custom-fields/advanced-custom-fields-pro:*",
+      "composer require gravityforms/gravityforms:*",
+      "rm -f build/wp-content/plugins/hello.php",
+      "git clone https://github.com/hectogonstudio/hectopress-theme.git build/wp-content/themes/hectopress",
+      "ditto wp-config.php build/wp-config.php"
+    ]
+  }
+}
